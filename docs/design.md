@@ -18,14 +18,14 @@ The canonical prior art is `mlx-lm-lora`: flat package layout, functional API + 
 
 1. **Research extensions** — subclassing `SDFTTrainer` and overriding `_make_loss_fn` requires access to the primitives.
 2. **Composability** — users may want to combine SDFT with other objectives or wrap it in a different outer loop.
-3. **Parity with the research code** — the research experiment (`experiments/001-sdft-borda-sparse-finetuning/`) uses the functional API directly; keeping it public makes migration a one-line import change.
+3. **Composability** — users experimenting with sparse fine-tuning or other extensions can build on the primitives without modifying the Trainer.
 
 ## Why `_make_loss_fn` as the subclass hook?
 
 MLX's `nn.value_and_grad(model, fn)` requires `fn(model, ...)` as a free function (not a method). The hook returns a closure that captures trainer state, which is passed to `value_and_grad` once at the start of `fit`. This:
 
 - Avoids recreating the autograd graph every step (efficient).
-- Lets subclasses inject different objectives (e.g. Borda-masked loss) without touching the training loop.
+- Lets subclasses inject different objectives without touching the training loop.
 - Keeps the teacher reference inside the closure so it can't be accidentally swapped mid-run.
 
 A `compute_loss(self, batch)` method hook was considered, but it would require wrapping in a free function wrapper every call, which has non-trivial overhead in MLX due to the lazy evaluation model.

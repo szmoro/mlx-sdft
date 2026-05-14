@@ -63,6 +63,6 @@ Typical α = 0.999 (full runs) or 0.99 (smoke tests). Small α makes the teacher
 
 Forward KL (KL[p_teacher || p_student]) would require importance-weighted samples from the teacher and is variance-heavy. Reverse KL (KL[p_student || p_teacher]) is estimated cheaply with a single student rollout. It has mode-seeking behaviour, which encourages the student to cover the high-probability modes of the teacher's distribution — appropriate for instruction following where we want the student to produce plausible responses, not necessarily all of them.
 
-## Gradient signal as affectedness proxy
+## Gradient signal
 
-The per-parameter gradient magnitude of the SDFT loss under a given training sample is a direct measure of how much that parameter's current value conflicts with what the task requires. This is the signal used in Phase 1 (Borda probe) of the research experiment — see `hypothesis.md` in the research repo for details.
+The per-parameter gradient magnitude of the SDFT loss is a direct measure of how much a parameter's current value conflicts with what the task requires — useful as an affectedness signal for sparse fine-tuning methods.

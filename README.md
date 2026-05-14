@@ -92,15 +92,14 @@ See [`docs/algorithm.md`](docs/algorithm.md) for the full derivation and data-fl
 
 ### Subclassing for custom objectives
 
-Override `_make_loss_fn` to inject a different loss (e.g. parameter masking for Borda-SDFT):
+Override `_make_loss_fn` to inject a different loss:
 
 ```python
-class BordaSDFTTrainer(SDFTTrainer):
+class CustomSDFTTrainer(SDFTTrainer):
     def _make_loss_fn(self):
-        mask = self.borda_mask  # pre-computed param mask
         base_fn = super()._make_loss_fn()
         def loss_fn(model, batch):
-            # apply mask before returning base loss
+            # modify or wrap the base loss
             ...
         return loss_fn
 ```

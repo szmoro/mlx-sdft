@@ -17,11 +17,10 @@ Usage::
 
 Subclassing for custom losses::
 
-    class BordaSDFTTrainer(SDFTTrainer):
+    class CustomSDFTTrainer(SDFTTrainer):
         def _make_loss_fn(self):
-            mask = self.frozen_mask   # set before calling fit
             def loss_fn(model, batch):
-                ...apply mask to grads...
+                ...
             return loss_fn
 """
 
@@ -188,7 +187,7 @@ class SDFTTrainer:
     def _make_loss_fn(self) -> Callable:
         """Return ``fn(model, batch) -> (scalar_loss, aux)``.
 
-        Override this in subclasses to plug in custom objectives (e.g. Borda-SDFT).
+        Override this in subclasses to plug in custom objectives.
         The function signature must match what ``nn.value_and_grad`` expects:
         first argument is the model whose parameters are differentiated.
         """
