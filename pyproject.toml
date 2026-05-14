@@ -5,7 +5,7 @@ description = "Self-Distillation Fine-Tuning (SDFT) for Apple Silicon — MLX im
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Moreno Raimondo Vendra" }]
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
