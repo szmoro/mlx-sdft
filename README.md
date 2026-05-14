@@ -18,7 +18,7 @@ uv add mlx-sdft
 uv add "mlx-sdft[data]"
 ```
 
-Requires macOS with Apple Silicon (MLX). Python 3.10+.
+Requires macOS with Apple Silicon (MLX). Python 3.14+.
 
 ---
 
@@ -114,15 +114,6 @@ class BordaSDFTTrainer(SDFTTrainer):
 | [`examples/minimal.py`](examples/minimal.py) | 30-line end-to-end on 0.5B |
 | [`examples/train_qwen.py`](examples/train_qwen.py) | Full 1.5B / UltraChat recipe |
 | [`examples/compare_sft_sdft.py`](examples/compare_sft_sdft.py) | Side-by-side loss + KL plot |
-
----
-
-## Roadmap
-
-- [ ] Borda-SDFT: gradient-magnitude Borda count selects minimal trainable param subset
-- [ ] Evaluation helpers: KL-from-base, HellaSwag, MMLU
-- [ ] Multi-turn UltraChat support
-- [ ] Quantised (4-bit) teacher to halve teacher memory footprint
 
 ---
 
