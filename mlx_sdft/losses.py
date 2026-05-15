@@ -5,8 +5,14 @@ SDFT reverse-KL loss (Shenfeld et al. 2026, https://arxiv.org/abs/2601.19897):
     L_SDFT = E_{y ~ π_student(·|x)} [ log π_student(y|x) − log π_teacher(y|x,c) ]
 
 The expectation is approximated by a single rollout y sampled from π_student.
-Gradient flows only through the student log-probs; teacher is called under
-mx.stop_gradient to ensure it contributes no gradient to the student.
+The gradient uses the REINFORCE / policy-gradient estimator to account for the
+gradient through the sampling distribution:
+
+    ∇_θ E_{y~π_s}[f(y)] = E_{y~π_s}[ (f(y) + 1) · ∇_θ log π_s(y|x) ]
+
+where f(y) = log π_s(y|x) − log π_t(y|x,c) is treated as a stop-gradiented
+reward signal. This correctly weights the gradient by the current divergence
+from the teacher, reducing variance compared to the naive biased estimator.
 
 Usage::
 
@@ -67,7 +73,10 @@ def sdft_loss(
         _logprobs_at_positions(teacher, teacher_input, y_ids)
     )
 
-    return mx.mean(log_p_student - log_p_teacher)
+    # REINFORCE estimator: weight gradient by per-token divergence from teacher.
+    # f is stop_gradiented — acts as a reward scalar, not a differentiable path.
+    f = mx.stop_gradient(log_p_student - log_p_teacher)
+    return mx.mean((f + 1.0) * log_p_student - log_p_teacher)
 
 
 def sft_loss(
